@@ -3,7 +3,7 @@
 # advertising-id-client
 
 
-This repository contains a tool to navigate deep into an URL redirection and open it in background.
+This repository contains a tool to get advertisingId from device without using google-play-services.
 
 ## Install
 
@@ -41,7 +41,7 @@ advertisingIdClient.setListener(new AdvertisingIdClient.Listener() {
         }
     });
 ```
-Invoke the process to get advertising id
+Invoke the process to get advertising id. This must be called from UI thread.
 ```java
 advertisingIdClient.getAdvertisingId(context);
 ```
