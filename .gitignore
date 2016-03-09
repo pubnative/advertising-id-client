@@ -1,3 +1,7 @@
+# Mac
+.DS_Store
+/captures
+
 # Built application files
 *.apk
 *.ap_
@@ -24,9 +28,9 @@ proguard/
 
 # Log Files
 *.log
+*.iml
 
-# Android Studio Navigation editor temp files
-.navigation/
-
-# Android Studio captures folder
-captures/
+# Android Studio/IntelliJ
+.idea
+.settings
+.project
