@@ -1,9 +1,7 @@
 [![Circle CI](https://circleci.com/gh/pubnative/advertising-id-client/tree/master.svg?style=shield)](https://circleci.com/gh/pubnative/advertising-id-client/tree/master)
 
 # advertising-id-client
-
-
-This repository contains a tool to get advertisingId from device without using google-play-services.
+This repository contains useful tools to retrieve android advertising id without using google play services
 
 ## Install
 
