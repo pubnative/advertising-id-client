@@ -1,5 +1,3 @@
-![driller icon](url-driller.png)
-
 [![Circle CI](https://circleci.com/gh/pubnative/advertising-id-client/tree/master.svg?style=shield)](https://circleci.com/gh/pubnative/advertising-id-client/tree/master)
 
 # advertising-id-client
