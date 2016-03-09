@@ -40,7 +40,7 @@ dependencies {
 //                packaging 'aar'
 //
 //                name "advertising-id-client"
-//                description "Tool for automate handling URL opening, even if these have redirections"
+//                description "Tool to retrieve android advertising id without using google play services"
 //
 //                // Set your license
 //                licenses {
