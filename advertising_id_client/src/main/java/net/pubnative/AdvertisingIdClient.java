@@ -71,6 +71,7 @@ public class AdvertisingIdClient {
      * Method to invoke the process of getting advertisingid
      *
      * @param context a valid context
+     * @param listener valid Listener for callbacks
      */
     public static void getAdvertisingId(final Context context, final Listener listener) {
 
