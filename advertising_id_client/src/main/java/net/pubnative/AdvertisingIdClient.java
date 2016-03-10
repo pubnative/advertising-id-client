@@ -40,15 +40,11 @@ import java.util.concurrent.LinkedBlockingQueue;
 public class AdvertisingIdClient {
 
     private static final String TAG = AdvertisingIdClient.class.getSimpleName();
+
     //==============================================================================================
     // LISTENER
     //==============================================================================================
     public interface Listener {
-
-        /**
-         * called when the process start
-         */
-        void onAdvertisingIdClientStart();
 
         /**
          * Called when process completed
@@ -66,35 +62,36 @@ public class AdvertisingIdClient {
     }
 
     protected Listener mListener;
-    protected Handler mHandler;
+    protected Handler  mHandler;
     //==============================================================================================
     // Public methods
     //==============================================================================================
-
-    /**
-     * This method will set up a listener
-     *
-     * @param listener valid listener or null
-     */
-    public void setListener(Listener listener) {
-        mListener = listener;
-    }
-
     /**
      * Method to invoke the process of getting advertisingid
+     *
      * @param context a valid context
      */
-    public void getAdvertisingId(final Context context) {
-        mHandler = new Handler();
-        new Thread(new Runnable() {
+    public void getAdvertisingId(final Context context, final Listener listener) {
 
-            @Override
-            public void run() {
+        if (listener == null) {
+            Log.e(TAG, "getAdvertisingId - Error: null listener, dropping call");
+        } else {
+            mHandler = new Handler();
+            mListener = listener;
 
-                invokeStart();
-                getAdvertisingIdInfo(context);
+            if(context == null) {
+                invokeFail(new Exception(TAG + " - Error: context null"));
+            } else {
+                new Thread(new Runnable() {
+
+                    @Override
+                    public void run() {
+
+                        getAdvertisingIdInfo(context);
+                    }
+                }).start();
             }
-        }).start();
+        }
     }
     //==============================================================================================
     // Inner Classes
@@ -109,15 +106,18 @@ public class AdvertisingIdClient {
         private final boolean mLimitAdTrackingEnabled;
 
         AdInfo(String advertisingId, boolean limitAdTrackingEnabled) {
+
             mAdvertisingId = advertisingId;
             mLimitAdTrackingEnabled = limitAdTrackingEnabled;
         }
 
         public String getId() {
+
             return mAdvertisingId;
         }
 
         public boolean isLimitAdTrackingEnabled() {
+
             return mLimitAdTrackingEnabled;
         }
     }
@@ -230,22 +230,6 @@ public class AdvertisingIdClient {
     //==============================================================================================
     // Listener helpers
     //==============================================================================================
-
-    protected void invokeStart() {
-
-        Log.v(TAG, "invokeStart");
-        mHandler.post(new Runnable() {
-
-            @Override
-            public void run() {
-
-                if (mListener != null) {
-                    mListener.onAdvertisingIdClientStart();
-                }
-            }
-        });
-    }
-
     protected void invokeFinish(final AdInfo adInfo) {
 
         Log.v(TAG, "invokeFinish");

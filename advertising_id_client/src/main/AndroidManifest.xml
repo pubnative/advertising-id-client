@@ -1,9 +1,6 @@
 <manifest package="net.pubnative.advertising_id_client"
           xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <application
-        android:label="@string/app_name">
-
-    </application>
+    <application/>
 
 </manifest>

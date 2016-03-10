@@ -28,25 +28,13 @@ public class AdvertisingIdClientTest {
     }
 
     @Test
-    public void invokeStartCallbackWithListener(){
-        AdvertisingIdClient advertisingIdClient = spy(AdvertisingIdClient.class);
-        AdvertisingIdClient.Listener advertisingIdClientListener = spy(AdvertisingIdClient.Listener.class);
-
-        advertisingIdClient.mHandler = new Handler();
-        advertisingIdClient.setListener(advertisingIdClientListener);
-        advertisingIdClient.invokeStart();
-
-        verify(advertisingIdClientListener, times(1)).onAdvertisingIdClientStart();
-    }
-
-    @Test
     public void invokeFinishCallbackWithListener() {
 
         AdvertisingIdClient advertisingIdClient = spy(AdvertisingIdClient.class);
         AdvertisingIdClient.Listener advertisingIdClientListener = spy(AdvertisingIdClient.Listener.class);
 
         advertisingIdClient.mHandler = new Handler();
-        advertisingIdClient.setListener(advertisingIdClientListener);
+        advertisingIdClient.mListener = advertisingIdClientListener;
         advertisingIdClient.invokeFinish(mock(AdvertisingIdClient.AdInfo.class));
 
         verify(advertisingIdClientListener, times(1)).onAdvertisingIdClientFinish(any(AdvertisingIdClient.AdInfo.class));
@@ -59,7 +47,7 @@ public class AdvertisingIdClientTest {
         AdvertisingIdClient.Listener advertisingIdClientListener = spy(AdvertisingIdClient.Listener.class);
 
         advertisingIdClient.mHandler = new Handler();
-        advertisingIdClient.setListener(advertisingIdClientListener);
+        advertisingIdClient.mListener = advertisingIdClientListener;
         advertisingIdClient.invokeFail(mock(Exception.class));
 
         verify(advertisingIdClientListener, times(1)).onAdvertisingIdClientFail(any(Exception.class));
@@ -74,6 +62,5 @@ public class AdvertisingIdClientTest {
 
         advertisingIdClient.invokeFail(mock(Exception.class));
         advertisingIdClient.invokeFinish(mock(AdvertisingIdClient.AdInfo.class));
-        advertisingIdClient.invokeStart();
     }
 }
