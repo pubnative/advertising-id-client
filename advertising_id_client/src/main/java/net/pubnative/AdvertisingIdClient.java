@@ -44,7 +44,7 @@ public class AdvertisingIdClient {
     //==============================================================================================
     // LISTENER
     //==============================================================================================
-    public interface Listener {
+    public static interface Listener {
 
         /**
          * Called when process completed
@@ -61,25 +61,25 @@ public class AdvertisingIdClient {
         void onAdvertisingIdClientFail(Exception exception);
     }
 
-    protected Listener mListener;
-    protected Handler  mHandler;
+    protected static Listener sListener;
+    protected static Handler  sHandler;
     //==============================================================================================
     // Public methods
     //==============================================================================================
+
     /**
      * Method to invoke the process of getting advertisingid
      *
      * @param context a valid context
      */
-    public void getAdvertisingId(final Context context, final Listener listener) {
+    public static void getAdvertisingId(final Context context, final Listener listener) {
 
         if (listener == null) {
             Log.e(TAG, "getAdvertisingId - Error: null listener, dropping call");
         } else {
-            mHandler = new Handler();
-            mListener = listener;
-
-            if(context == null) {
+            sHandler = new Handler();
+            sListener = listener;
+            if (context == null) {
                 invokeFail(new Exception(TAG + " - Error: context null"));
             } else {
                 new Thread(new Runnable() {
@@ -100,7 +100,7 @@ public class AdvertisingIdClient {
     /**
      * Ad Info data class with the results
      */
-    public class AdInfo {
+    public static class AdInfo {
 
         private final String  mAdvertisingId;
         private final boolean mLimitAdTrackingEnabled;
@@ -125,7 +125,7 @@ public class AdvertisingIdClient {
     /**
      * Advertising Service Connection
      */
-    private class AdvertisingConnection implements ServiceConnection {
+    private static class AdvertisingConnection implements ServiceConnection {
 
         boolean retrieved = false;
         private final LinkedBlockingQueue<IBinder> queue = new LinkedBlockingQueue<IBinder>(1);
@@ -150,7 +150,7 @@ public class AdvertisingIdClient {
     /**
      * Advertising IInterface to get the ID
      */
-    private class AdvertisingInterface implements IInterface {
+    private static class AdvertisingInterface implements IInterface {
 
         private IBinder binder;
 
@@ -200,7 +200,7 @@ public class AdvertisingIdClient {
         }
     }
 
-    private void getAdvertisingIdInfo(Context context) {
+    private static void getAdvertisingIdInfo(Context context) {
 
         Log.v(TAG, "getAdvertisingIdInfo");
         try {
@@ -230,31 +230,31 @@ public class AdvertisingIdClient {
     //==============================================================================================
     // Listener helpers
     //==============================================================================================
-    protected void invokeFinish(final AdInfo adInfo) {
+    protected static void invokeFinish(final AdInfo adInfo) {
 
         Log.v(TAG, "invokeFinish");
-        mHandler.post(new Runnable() {
+        sHandler.post(new Runnable() {
 
             @Override
             public void run() {
 
-                if (mListener != null) {
-                    mListener.onAdvertisingIdClientFinish(adInfo);
+                if (sListener != null) {
+                    sListener.onAdvertisingIdClientFinish(adInfo);
                 }
             }
         });
     }
 
-    protected void invokeFail(final Exception exception) {
+    protected static void invokeFail(final Exception exception) {
 
         Log.v(TAG, "invokeFail: " + exception);
-        mHandler.post(new Runnable() {
+        sHandler.post(new Runnable() {
 
             @Override
             public void run() {
 
-                if (mListener != null) {
-                    mListener.onAdvertisingIdClientFail(exception);
+                if (sListener != null) {
+                    sListener.onAdvertisingIdClientFail(exception);
                 }
             }
         });
