@@ -31,6 +31,7 @@ import android.content.pm.PackageManager;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.IInterface;
+import android.os.Looper;
 import android.os.Parcel;
 import android.os.RemoteException;
 import android.util.Log;
@@ -44,17 +45,17 @@ public class AdvertisingIdClient {
     //==============================================================================================
     // LISTENER
     //==============================================================================================
-    public static interface Listener {
+    public interface Listener {
 
         /**
-         * Called when process completed
+         * Called when process completed using UI Thread
          *
          * @param adInfo <code>AdInfo</code> object
          */
         void onAdvertisingIdClientFinish(AdInfo adInfo);
 
         /**
-         * Called when getting advertising id fails
+         * Called when getting advertising id fails using UI Thread
          *
          * @param exception exception with extended message of the error.
          */
@@ -68,7 +69,7 @@ public class AdvertisingIdClient {
     //==============================================================================================
 
     /**
-     * Method to invoke the process of getting advertisingid
+     * Method to invoke the process of getting advertisingid, using UIThread
      *
      * @param context a valid context
      * @param listener valid Listener for callbacks
@@ -78,7 +79,7 @@ public class AdvertisingIdClient {
         if (listener == null) {
             Log.e(TAG, "getAdvertisingId - Error: null listener, dropping call");
         } else {
-            sHandler = new Handler();
+            sHandler = new Handler(Looper.getMainLooper());
             sListener = listener;
             if (context == null) {
                 invokeFail(new Exception(TAG + " - Error: context null"));
