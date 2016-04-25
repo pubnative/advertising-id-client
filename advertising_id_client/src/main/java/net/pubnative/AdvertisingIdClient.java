@@ -31,6 +31,7 @@ import android.content.pm.PackageManager;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.IInterface;
+import android.os.Looper;
 import android.os.Parcel;
 import android.os.RemoteException;
 import android.util.Log;
@@ -44,64 +45,44 @@ public class AdvertisingIdClient {
     //==============================================================================================
     // LISTENER
     //==============================================================================================
-    public static interface Listener {
+    public interface Listener {
 
         /**
-         * Called when process completed
+         * Called when process completed using UI Thread
          *
          * @param adInfo <code>AdInfo</code> object
          */
         void onAdvertisingIdClientFinish(AdInfo adInfo);
 
         /**
-         * Called when getting advertising id fails
+         * Called when getting advertising id fails using UI Thread
          *
          * @param exception exception with extended message of the error.
          */
         void onAdvertisingIdClientFail(Exception exception);
     }
 
-    protected static Listener sListener;
-    protected static Handler  sHandler;
+    protected Listener mListener;
+    protected Handler  mHandler;
     //==============================================================================================
     // Public methods
     //==============================================================================================
 
     /**
-     * Method to invoke the process of getting advertisingid
+     * Method to invoke the process of getting advertisingid, using UIThread
      *
-     * @param context a valid context
+     * @param context  a valid context
      * @param listener valid Listener for callbacks
      */
-    public static void getAdvertisingId(final Context context, final Listener listener) {
+    public static synchronized void getAdvertisingId(Context context, Listener listener) {
 
-        if (listener == null) {
-            Log.e(TAG, "getAdvertisingId - Error: null listener, dropping call");
-        } else {
-            sHandler = new Handler();
-            sListener = listener;
-            if (context == null) {
-                invokeFail(new Exception(TAG + " - Error: context null"));
-            } else {
-                new Thread(new Runnable() {
-
-                    @Override
-                    public void run() {
-
-                        getAdvertisingIdInfo(context);
-                    }
-                }).start();
-            }
-        }
+        new AdvertisingIdClient().start(context, listener);
     }
-    //==============================================================================================
-    // Inner Classes
-    //==============================================================================================
 
     /**
      * Ad Info data class with the results
      */
-    public static class AdInfo {
+    public class AdInfo {
 
         private final String  mAdvertisingId;
         private final boolean mLimitAdTrackingEnabled;
@@ -122,11 +103,14 @@ public class AdvertisingIdClient {
             return mLimitAdTrackingEnabled;
         }
     }
+    //==============================================================================================
+    // Inner classes
+    //==============================================================================================
 
     /**
      * Advertising Service Connection
      */
-    private static class AdvertisingConnection implements ServiceConnection {
+    protected class AdvertisingConnection implements ServiceConnection {
 
         boolean retrieved = false;
         private final LinkedBlockingQueue<IBinder> queue = new LinkedBlockingQueue<IBinder>(1);
@@ -151,7 +135,7 @@ public class AdvertisingIdClient {
     /**
      * Advertising IInterface to get the ID
      */
-    private static class AdvertisingInterface implements IInterface {
+    protected class AdvertisingInterface implements IInterface {
 
         private IBinder binder;
 
@@ -201,7 +185,32 @@ public class AdvertisingIdClient {
         }
     }
 
-    private static void getAdvertisingIdInfo(Context context) {
+    //==============================================================================================
+    // Inner methods
+    //==============================================================================================
+    protected void start(final Context context, final Listener listener) {
+
+        if (listener == null) {
+            Log.e(TAG, "getAdvertisingId - Error: null listener, dropping call");
+        } else {
+            mHandler = new Handler(Looper.getMainLooper());
+            mListener = listener;
+            if (context == null) {
+                invokeFail(new Exception(TAG + " - Error: context null"));
+            } else {
+                new Thread(new Runnable() {
+
+                    @Override
+                    public void run() {
+
+                        getAdvertisingIdInfo(context);
+                    }
+                }).start();
+            }
+        }
+    }
+
+    private void getAdvertisingIdInfo(Context context) {
 
         Log.v(TAG, "getAdvertisingIdInfo");
         try {
@@ -231,31 +240,31 @@ public class AdvertisingIdClient {
     //==============================================================================================
     // Listener helpers
     //==============================================================================================
-    protected static void invokeFinish(final AdInfo adInfo) {
+    protected void invokeFinish(final AdInfo adInfo) {
 
         Log.v(TAG, "invokeFinish");
-        sHandler.post(new Runnable() {
+        mHandler.post(new Runnable() {
 
             @Override
             public void run() {
 
-                if (sListener != null) {
-                    sListener.onAdvertisingIdClientFinish(adInfo);
+                if (mListener != null) {
+                    mListener.onAdvertisingIdClientFinish(adInfo);
                 }
             }
         });
     }
 
-    protected static void invokeFail(final Exception exception) {
+    protected void invokeFail(final Exception exception) {
 
         Log.v(TAG, "invokeFail: " + exception);
-        sHandler.post(new Runnable() {
+        mHandler.post(new Runnable() {
 
             @Override
             public void run() {
 
-                if (sListener != null) {
-                    sListener.onAdvertisingIdClientFail(exception);
+                if (mListener != null) {
+                    mListener.onAdvertisingIdClientFail(exception);
                 }
             }
         });

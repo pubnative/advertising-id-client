@@ -38,7 +38,7 @@ You can always download this repository and include it as a module in your proje
 <a name="usage"></a>
 ## Usage
 
-Invoke the process to get advertising id. This must be called from UI thread.
+Invoke the process to get advertising id.
 
 ```java
 AdvertisingIdClient.getAdvertisingId(<CONTEXT>, new AdvertisingIdClient.Listener() {
