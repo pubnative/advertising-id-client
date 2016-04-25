@@ -33,7 +33,7 @@ public class AdvertisingIdClientTest {
         AdvertisingIdClient advertisingIdClient = spy(AdvertisingIdClient.class);
         AdvertisingIdClient.Listener advertisingIdClientListener = spy(AdvertisingIdClient.Listener.class);
 
-        advertisingIdClient.sHandler = new Handler();
+        advertisingIdClient.mHandler = new Handler();
         advertisingIdClient.mListener = advertisingIdClientListener;
         advertisingIdClient.invokeFinish(mock(AdvertisingIdClient.AdInfo.class));
 
@@ -46,7 +46,7 @@ public class AdvertisingIdClientTest {
         AdvertisingIdClient advertisingIdClient = spy(AdvertisingIdClient.class);
         AdvertisingIdClient.Listener advertisingIdClientListener = spy(AdvertisingIdClient.Listener.class);
 
-        advertisingIdClient.sHandler = new Handler();
+        advertisingIdClient.mHandler  = new Handler();
         advertisingIdClient.mListener = advertisingIdClientListener;
         advertisingIdClient.invokeFail(mock(Exception.class));
 
@@ -58,7 +58,7 @@ public class AdvertisingIdClientTest {
 
         AdvertisingIdClient advertisingIdClient = spy(AdvertisingIdClient.class);
 
-        advertisingIdClient.sHandler = new Handler();
+        advertisingIdClient.mHandler  = new Handler();
 
         advertisingIdClient.invokeFail(mock(Exception.class));
         advertisingIdClient.invokeFinish(mock(AdvertisingIdClient.AdInfo.class));
