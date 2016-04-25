@@ -1,8 +1,7 @@
-[![Circle CI](https://circleci.com/gh/pubnative/advertising-id-client/tree/master.svg?style=shield)](https://circleci.com/gh/pubnative/advertising-id-client/tree/master)
+[![Circle CI](https://circleci.com/gh/pubnative/advertising-id-client/tree/master.svg?style=shield)](https://circleci.com/gh/pubnative/advertising-id-client/tree/master)  ![License](https://img.shields.io/badge/license-MIT-lightgrey.svg)
 
 # advertising-id-client
 This repository contains useful tools to retrieve android advertising id without using google play services
-
 
 ##Contents
 
@@ -28,12 +27,12 @@ There are no specified requirements.
 
 Add the following line to your build.gradle file
 
-`compile "net.pubnative:advertising_id_client:1.0.0"`
+`compile "net.pubnative:advertising_id_client:1.0.1"`
 
 <a name="manual"></a>
 ###Manual
 
-You can always download this repository and include it as a module in your project
+Simply download the `AdvertisingIDClient.java` file and inject it into your project or include this repository as a new module in your project
 
 <a name="usage"></a>
 ## Usage
@@ -45,7 +44,7 @@ AdvertisingIdClient.getAdvertisingId(<CONTEXT>, new AdvertisingIdClient.Listener
                                     
     @Override
     public void onAdvertisingIdClientFinish(AdvertisingIdClient.AdInfo adInfo) {
-    // Callback when process is over
+        // Callback when process is over
     }
 
     @Override
