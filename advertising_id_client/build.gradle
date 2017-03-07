@@ -40,8 +40,6 @@ android {
 }
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.google.code.gson:gson:2.4'
-    compile 'net.pubnative:url_driller:1.3.2'
     // JVM tests
     testCompile 'junit:junit:4.12'
     testCompile 'com.squareup.assertj:assertj-android:1.0.0'
@@ -113,7 +111,7 @@ if (System.getenv("CIRCLECI")) {
             configurations = ['archives']
             userOrg = 'pubnative'
             repo = 'maven'
-            name = project.name
+            name = "advertising-id-client"
             vcsUrl = "https://github.com/pubnative/advertising-id-client.git"
             licenses = ['MIT']
             version{
