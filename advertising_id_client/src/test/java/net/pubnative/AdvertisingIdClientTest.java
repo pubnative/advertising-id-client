@@ -6,7 +6,7 @@ import net.pubnative.advertising_id_client.BuildConfig;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.robolectric.RobolectricGradleTestRunner;
+import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -16,8 +16,10 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-@RunWith(RobolectricGradleTestRunner.class)
-@Config(constants = BuildConfig.class)
+
+@RunWith(RobolectricTestRunner.class)
+@Config(constants = BuildConfig.class,
+        sdk = 21)
 public class AdvertisingIdClientTest {
 
     @Test
