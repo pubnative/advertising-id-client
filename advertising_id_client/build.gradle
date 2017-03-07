@@ -114,6 +114,8 @@ if (System.getenv("CIRCLECI")) {
             userOrg = 'pubnative'
             repo = 'maven'
             name = project.name
+            vcsUrl = "https://github.com/pubnative/advertising-id-client.git"
+            licenses = ['MIT']
             version{
                 name = project.version
                 vcsTag = project.version
