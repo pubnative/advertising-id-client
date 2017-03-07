@@ -34,6 +34,7 @@ import android.os.IInterface;
 import android.os.Looper;
 import android.os.Parcel;
 import android.os.RemoteException;
+import android.text.TextUtils;
 import android.util.Log;
 
 import java.util.concurrent.LinkedBlockingQueue;
@@ -222,17 +223,22 @@ public class AdvertisingIdClient {
             try {
                 if (context.bindService(intent, connection, Context.BIND_AUTO_CREATE)) {
                     AdvertisingInterface adInterface = new AdvertisingInterface(connection.getBinder());
-                    AdInfo adInfo = new AdInfo(adInterface.getId(), adInterface.isLimitAdTrackingEnabled(true));
-                    invokeFinish(adInfo);
+                    String id = adInterface.getId();
+                    if(TextUtils.isEmpty(id)) {
+                        Log.w(TAG, "getAdvertisingIdInfo - Error: ID Not available");
+                        invokeFail(new Exception("Advertising ID extraction Error: ID Not available"));
+                    } else {
+                        invokeFinish(new AdInfo(id, adInterface.isLimitAdTrackingEnabled(true)));
+                    }
                 }
             } catch (Exception exception) {
-                Log.e(TAG, "getAdvertisingIdInfo - Error: " + exception);
+                Log.w(TAG, "getAdvertisingIdInfo - Error: " + exception);
                 invokeFail(exception);
             } finally {
                 context.unbindService(connection);
             }
         } catch (Exception exception) {
-            Log.e(TAG, "getAdvertisingIdInfo - Error: " + exception);
+            Log.w(TAG, "getAdvertisingIdInfo - Error: " + exception);
             invokeFail(exception);
         }
     }

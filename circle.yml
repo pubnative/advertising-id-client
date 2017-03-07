@@ -1,3 +1,17 @@
 machine:
-  timezone:
-    Europe/Berlin
+  timezone: Europe/Berlin
+  environment:
+      GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx2048m -XX:MaxPermSize=1024m -Xms512m -XX:+HeapDumpOnOutOfMemoryError"'
+  java:
+      version: oraclejdk8
+test:
+  override:
+    - ./gradlew clean testDebug
+deployment:
+  production:
+    branch: master
+    commands:
+      # Create JAR with this version
+      - ./gradlew createJar
+      # Publish to BINTRAY
+      - if [ -z $IS_BETA ] ; then ./gradlew bintrayUpload ; fi
